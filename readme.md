@@ -1,40 +1,47 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+## Elastique Assignment
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+This is my solution to the elastique assignment. The assignment was 
+to make an API which would allow the user to obtain authors/publishers and
+books.
 
-## About Laravel
+## Changes to the API
+There are some minor and one big change in the API from the example 
+provided by elastique.
+ 
+ 1. Some names may alter slightly. for example, the reply will return
+    firstname and lastname instead of first_name and last_name
+ 2. I am not a big fan of returning system ID's in API's, as they
+    usually provide an easy way to find records that users may or may
+    not have access to. So instead of returning the ID, i return a
+    UUID
+    
+## Caching
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+### Response Caching
+I added two "caching" strategies: one is caching the response of GET
+requests. Which will perfectly as it is as there is currently no 
+access restriction which may interfere with access to data.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Proxy Caching
+Also, because there is no difference in who can see which data, I also
+added response headers for reverse proxies (like varnish or nginx), so
+they can also cache the data, basically offloading all caching from the
+app server to an external proxy server if available.
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+## Installation
+Do a composer install, and make sure you have a proper .env file.
+To load the database use:
 
-## Learning Laravel
+```bash
+php artisan migrate
+php artisan db:seed
+```
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+Lastly you will need to make sure you have an algolia account for 
+the search index. If you have it installed and set the App ID and
+admin key, run:
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+```bash
+php artisan scout:import "App\Models\Book"
+```
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
