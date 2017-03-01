@@ -47,6 +47,7 @@ $factory->define(\App\Models\Book::class, function( \Faker\Generator $faker) {
     'coverurl'    => $faker->imageUrl(),
     'isbn'        => $faker->isbn10,
     'publisher_id'=> $faker->randomNumber(2),
-    'author_id'   => $faker->randomNumber(2)
+    'author_id'   => $faker->randomNumber(2),
+    'highlighted' => rand(0,1)
   ];
 });

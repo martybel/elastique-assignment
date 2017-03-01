@@ -12,9 +12,16 @@ use App\Models\Book;
 class BookController extends Controller
 {
 
-  public function highlighted()
+  public function highlighted($limit = 1000, $offset = 0)
   {
-    return Book::all();
+    $books = Book::where('highlighted',1)->limit($limit)->offset($offset)->get();
+
+    return [
+      'books' => $books,
+      'offset'=> $offset,
+      'limit' => $limit,
+      'total' => Book::all()->count()
+    ];
   }
 
   public function search($term,$limit = 1000, $offset = 0)

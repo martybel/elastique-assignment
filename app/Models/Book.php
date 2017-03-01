@@ -20,7 +20,8 @@ class Book extends Model
     'coverurl',
     'isbn',
     'publisher_id',
-    'author_id'
+    'author_id',
+    'highlighted'
   ];
 
   public function getAuthorAttribute()
